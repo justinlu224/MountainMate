@@ -29,6 +29,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.mountainmate.ui.list.ListScreen
 import com.example.mountainmate.ui.theme.MountainMateTheme
 
 sealed class Screen(val route: String, @StringRes val resourceId: Int, val icon: ImageVector) {
@@ -84,7 +85,7 @@ class MainActivity : ComponentActivity() {
                 }
             }
         ) { paddingValues ->
-            NavHost(navController = navController, startDestination = Screen.Home.route, modifier = Modifier.padding(paddingValues)) {
+            NavHost(navController = navController, startDestination = Screen.List.route, modifier = Modifier.padding(paddingValues)) {
                 composable(Screen.Home.route) {
                     HomeScreen()
                 }
@@ -92,16 +93,6 @@ class MainActivity : ComponentActivity() {
                     ListScreen()
                 }
             }
-        }
-    }
-
-    @Composable
-    private fun ListScreen() {
-        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-            Text(
-                text = "List Screen",
-                textAlign = TextAlign.Center
-            )
         }
     }
 
