@@ -47,6 +47,7 @@ class MainActivity : ComponentActivity() {
             MountainMateTheme {
                 MainScreen()
             }
+
         }
     }
 
@@ -85,7 +86,7 @@ class MainActivity : ComponentActivity() {
                 }
             }
         ) { paddingValues ->
-            NavHost(navController = navController, startDestination = Screen.List.route, modifier = Modifier.padding(paddingValues)) {
+            NavHost(navController = navController, startDestination = Screen.Home.route, modifier = Modifier.padding(paddingValues)) {
                 composable(Screen.Home.route) {
                     HomeScreen()
                 }
