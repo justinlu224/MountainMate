@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">MountainMate</string>
+    <string name="home">首頁</string>
+    <string name="list">清單</string>
 </resources>
