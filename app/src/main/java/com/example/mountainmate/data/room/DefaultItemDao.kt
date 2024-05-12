@@ -6,10 +6,11 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
+import com.example.mountainmate.di.DEFAULT_ITEM_TABLE_NAME
 
 @Dao
 interface DefaultItemDao {
-    @Query("SELECT * FROM default_item")
+    @Query("SELECT * FROM $DEFAULT_ITEM_TABLE_NAME")
     suspend fun getAllDefaultItems(): List<DefaultItemEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

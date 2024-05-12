@@ -6,11 +6,12 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
+import com.example.mountainmate.di.CHECK_ITEM_TABLE_NAME
 
 @Dao
 interface CheckItemListDao {
 
-    @Query("SELECT * FROM check_item WHERE schedule_id = :scheduleId")
+    @Query("SELECT * FROM $CHECK_ITEM_TABLE_NAME WHERE schedule_id = :scheduleId")
     suspend fun getCheckItemList(scheduleId: Int): List<CheckItemEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
