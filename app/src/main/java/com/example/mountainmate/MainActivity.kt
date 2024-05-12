@@ -8,8 +8,8 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.List
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
@@ -29,17 +29,20 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.mountainmate.ui.itemlist.ItemListScreen
 import com.example.mountainmate.ui.list.ListScreen
 import com.example.mountainmate.ui.theme.MountainMateTheme
 
-sealed class Screen(val route: String, @StringRes val resourceId: Int, val icon: ImageVector) {
+sealed class Screen(val route: String, @StringRes val resourceId: Int, val icon: ImageVector? = null) {
     data object Home : Screen("Home", R.string.home, Icons.Default.Home)
-    data object List : Screen("List", R.string.list, Icons.Default.Add)
+    data object Schedule : Screen("Schedule", R.string.schedule, Icons.Default.List)
+
+    data object ItemList : Screen("ItemList", R.string.item_list)
 }
 
 class MainActivity : ComponentActivity() {
 
-    private val screens = listOf<Screen>(Screen.Home, Screen.List)
+    private val screens = listOf<Screen>(Screen.Home, Screen.Schedule)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -74,7 +77,7 @@ class MainActivity : ComponentActivity() {
                                       }
                             },
                             icon = {
-                                Icon(imageVector = screen.icon, contentDescription = screen.route)
+                                Icon(imageVector = screen.icon!!, contentDescription = screen.route)
                             },
                             label = {
                                 Text(
@@ -90,8 +93,12 @@ class MainActivity : ComponentActivity() {
                 composable(Screen.Home.route) {
                     HomeScreen()
                 }
-                composable(Screen.List.route) {
-                    ListScreen()
+                composable(Screen.Schedule.route) {
+                    ListScreen(navController)
+                }
+
+                composable(Screen.ItemList.route) {
+                    ItemListScreen()
                 }
             }
         }
