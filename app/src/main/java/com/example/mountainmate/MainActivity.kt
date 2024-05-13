@@ -17,21 +17,29 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavController
+import androidx.navigation.NavDestination
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navigation
 import com.example.mountainmate.ui.itemlist.ItemListScreen
 import com.example.mountainmate.ui.list.ListScreen
 import com.example.mountainmate.ui.theme.MountainMateTheme
+import dagger.hilt.android.AndroidEntryPoint
 
 sealed class Screen(val route: String, @StringRes val resourceId: Int, val icon: ImageVector? = null) {
     data object Home : Screen("Home", R.string.home, Icons.Default.Home)
@@ -40,6 +48,7 @@ sealed class Screen(val route: String, @StringRes val resourceId: Int, val icon:
     data object ItemList : Screen("ItemList", R.string.item_list)
 }
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
     private val screens = listOf<Screen>(Screen.Home, Screen.Schedule)
@@ -50,7 +59,6 @@ class MainActivity : ComponentActivity() {
             MountainMateTheme {
                 MainScreen()
             }
-
         }
     }
 
@@ -58,8 +66,21 @@ class MainActivity : ComponentActivity() {
     @OptIn(ExperimentalMaterial3Api::class)
     private fun MainScreen() {
         val navController = rememberNavController()
+        var showBottomBar by remember {
+            mutableStateOf(true)
+        }
+
+        LaunchedEffect(key1 = Unit) {
+            navController.addOnDestinationChangedListener { _, destination, _ ->
+                showBottomBar = destination.route in listOf(Screen.Home.route, Screen.Schedule.route)
+            }
+        }
+
         Scaffold(
             bottomBar = {
+
+                if(!showBottomBar) return@Scaffold
+
                 NavigationBar {
                     val navBackStackEntry by navController.currentBackStackEntryAsState()
                     val currentDestination = navBackStackEntry?.destination
