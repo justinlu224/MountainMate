@@ -28,16 +28,13 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.navigation.NavController
-import androidx.navigation.NavDestination
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navigation
 import com.example.mountainmate.ui.itemlist.ItemListScreen
-import com.example.mountainmate.ui.list.ListScreen
+import com.example.mountainmate.ui.schedule.ScheduleScreen
 import com.example.mountainmate.ui.theme.MountainMateTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -115,7 +112,7 @@ class MainActivity : ComponentActivity() {
                     HomeScreen()
                 }
                 composable(Screen.Schedule.route) {
-                    ListScreen(navController)
+                    ScheduleScreen(navController)
                 }
 
                 composable(Screen.ItemList.route) {

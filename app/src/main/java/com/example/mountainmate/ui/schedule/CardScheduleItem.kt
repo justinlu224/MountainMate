@@ -1,4 +1,4 @@
-package com.example.mountainmate.ui.list
+package com.example.mountainmate.ui.schedule
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
@@ -19,7 +19,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.mountainmate.Screen
 
 @Composable
-fun CardScheduleItem(i: Int, navController: NavHostController) {
+fun CardScheduleItem(name: String, navController: NavHostController) {
     Surface(
         modifier = Modifier
             .size(120.dp, 120.dp),
@@ -35,7 +35,7 @@ fun CardScheduleItem(i: Int, navController: NavHostController) {
             }
             ) {
             Text(
-                text = "Item $i",
+                text = name,
                 textAlign = TextAlign.Center,
                 modifier = Modifier.align(Alignment.Center),
                 style = MaterialTheme.typography.titleLarge
@@ -48,5 +48,5 @@ fun CardScheduleItem(i: Int, navController: NavHostController) {
 @Composable
 fun CardScheduleItemPreview() {
 
-    CardScheduleItem(1, rememberNavController())
+    CardScheduleItem("testname", rememberNavController())
 }

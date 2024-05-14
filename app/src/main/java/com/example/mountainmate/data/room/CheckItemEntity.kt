@@ -5,9 +5,10 @@ import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.ForeignKey.Companion.CASCADE
 import androidx.room.PrimaryKey
+import com.example.mountainmate.di.CHECK_ITEM_TABLE_NAME
 
 @Entity(
-    tableName = "check_item",
+    tableName = CHECK_ITEM_TABLE_NAME,
     foreignKeys = [
         ForeignKey(
             entity = ScheduleEntity::class,

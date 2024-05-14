@@ -4,6 +4,7 @@ import com.example.mountainmate.data.datasource.LocalDataSource
 import com.example.mountainmate.data.repository.ScheduleRepository
 import com.example.mountainmate.data.room.AppDataBase
 import com.example.mountainmate.data.room.DefaultItemDao
+import com.example.mountainmate.data.room.ScheduleDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -27,6 +28,12 @@ class RepositoryModule {
     @Singleton
     fun provideDefaultItemDao(appDatabase: AppDataBase): DefaultItemDao {
         return appDatabase.defaultItemDao()
+    }
+
+    @Provides
+    @Singleton
+    fun provideScheduleDao(appDatabase: AppDataBase): ScheduleDao {
+        return appDatabase.scheduleDao()
     }
 
 }
