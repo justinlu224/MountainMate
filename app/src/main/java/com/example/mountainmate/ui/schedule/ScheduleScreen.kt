@@ -51,7 +51,7 @@ fun ScheduleScreen(
             contentPadding = PaddingValues(16.dp)
         ) {
             items(uiState.scheduleList) {
-                CardScheduleItem(name = it, navController = navController)
+                CardScheduleItem(scheduleEntity = it, navController = navController)
             }
         }
 

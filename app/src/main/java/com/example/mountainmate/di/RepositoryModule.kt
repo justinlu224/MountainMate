@@ -6,6 +6,7 @@ import com.example.mountainmate.data.room.AppDataBase
 import com.example.mountainmate.data.room.CheckItemListDao
 import com.example.mountainmate.data.room.DefaultItemDao
 import com.example.mountainmate.data.room.ScheduleDao
+import com.example.mountainmate.ui.itemlist.ItemListRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -27,18 +28,23 @@ class RepositoryModule {
 
     @Provides
     @Singleton
+    fun bindItemListRepository(
+        localDataSource: LocalDataSource
+    ): ItemListRepository {
+        return ItemListRepository(localDataSource)
+    }
+
+    @Provides
     fun provideDefaultItemDao(appDatabase: AppDataBase): DefaultItemDao {
         return appDatabase.defaultItemDao()
     }
 
     @Provides
-    @Singleton
     fun provideScheduleDao(appDatabase: AppDataBase): ScheduleDao {
         return appDatabase.scheduleDao()
     }
 
     @Provides
-    @Singleton
     fun provideCheckItemListDao(appDatabase: AppDataBase): CheckItemListDao {
         return appDatabase.checkItemDao()
     }

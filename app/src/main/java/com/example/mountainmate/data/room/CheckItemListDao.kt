@@ -11,7 +11,7 @@ import com.example.mountainmate.di.CHECK_ITEM_TABLE_NAME
 @Dao
 interface CheckItemListDao {
 
-    @Query("SELECT * FROM $CHECK_ITEM_TABLE_NAME WHERE schedule_id = :scheduleId")
+    @Query("SELECT * FROM $CHECK_ITEM_TABLE_NAME WHERE schedule_id = :scheduleId ORDER BY category")
     suspend fun getCheckItemList(scheduleId: Int): List<CheckItemEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

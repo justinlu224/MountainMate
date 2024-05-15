@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Checkbox
-import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SwipeToDismissBox
@@ -20,6 +19,7 @@ import androidx.compose.material3.rememberSwipeToDismissBoxState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -30,6 +30,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.mountainmate.ui.theme.MountainMateTheme
 
 data class SectionData(
@@ -45,24 +46,23 @@ data class ItemData(
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
-fun ItemListScreen() {
+fun ItemListScreen(
+    scheduleId: Int,
+    viewModel: ItemListViewModel = hiltViewModel()
+) {
 
-    val sections = listOf(
-        SectionData("Section 1", listOf(ItemData("Item 1", false), ItemData("Item 2", false), ItemData("Item 3", false))),
-        SectionData("Section 2", listOf(ItemData("Item 4", false), ItemData("Item 5", false), ItemData("Item 6", false))),
-        SectionData("Section 3", listOf(ItemData("Item 7", false), ItemData("Item 8", false), ItemData("Item 9", false))),
-        SectionData("Section 4", listOf(ItemData("Item 10", false), ItemData("Item 11", false), ItemData("Item 12", false))),
-        SectionData("Section 5", listOf(ItemData("Item 13", false), ItemData("Item 14", false), ItemData("Item 15", false))),
-        SectionData("Section 6", listOf(ItemData("Item 16", false), ItemData("Item 17", false), ItemData("Item 18", false))),
-        SectionData("Section 7", listOf(ItemData("Item 19", false), ItemData("Item 20", false), ItemData("Item 21", false))),
-        SectionData("Section 8", listOf(ItemData("Item 22", false), ItemData("Item 23", false), ItemData("Item 24", false))),
-    )
+    LaunchedEffect(key1 = Unit) {
+        println("@@@@@@@: scheduleId: $scheduleId")
+        viewModel.updateCheckItemList(scheduleId)
+    }
+
+    val uiState by viewModel.uiState.collectAsState()
 
     LazyColumn(
         modifier = Modifier.fillMaxSize()
     ) {
 
-        sections.forEach { sectionData ->
+        uiState.checkItemList.forEach { sectionData ->
 
             stickyHeader {
                 Section(sectionData = sectionData.title) {
@@ -163,7 +163,7 @@ private fun SwipeItem(s: String) {
 @Composable
 fun ItemListScreenPreview() {
     MountainMateTheme {
-        ItemListScreen()
+        ItemListScreen(1)
     }
 }
 
@@ -171,7 +171,7 @@ fun ItemListScreenPreview() {
 @Composable
 fun ItemListScreenPreviewNight() {
     MountainMateTheme {
-        ItemListScreen()
+        ItemListScreen(1)
     }
 }
 

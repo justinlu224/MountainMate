@@ -17,9 +17,10 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.mountainmate.Screen
+import com.example.mountainmate.data.room.ScheduleEntity
 
 @Composable
-fun CardScheduleItem(name: String, navController: NavHostController) {
+fun CardScheduleItem(scheduleEntity: ScheduleEntity, navController: NavHostController) {
     Surface(
         modifier = Modifier
             .size(120.dp, 120.dp),
@@ -31,11 +32,11 @@ fun CardScheduleItem(name: String, navController: NavHostController) {
     ) {
         Box(modifier = Modifier
             .clickable {
-                navController.navigate(Screen.ItemList.route)
+                navController.navigate("${Screen.ItemList.route}/${scheduleEntity.id}")
             }
             ) {
             Text(
-                text = name,
+                text = scheduleEntity.name,
                 textAlign = TextAlign.Center,
                 modifier = Modifier.align(Alignment.Center),
                 style = MaterialTheme.typography.titleLarge
@@ -48,5 +49,5 @@ fun CardScheduleItem(name: String, navController: NavHostController) {
 @Composable
 fun CardScheduleItemPreview() {
 
-    CardScheduleItem("testname", rememberNavController())
+    CardScheduleItem(ScheduleEntity(0,"dasdasdads"), rememberNavController())
 }

@@ -33,6 +33,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.example.mountainmate.ui.itemlist.ItemListScreen
 import com.example.mountainmate.ui.schedule.ScheduleScreen
 import com.example.mountainmate.ui.theme.MountainMateTheme
@@ -115,9 +116,17 @@ class MainActivity : ComponentActivity() {
                     ScheduleScreen(navController)
                 }
 
-                composable(Screen.ItemList.route) {
-                    ItemListScreen()
+                composable(
+                    "${Screen.ItemList.route}/{scheduleId}",
+                    arguments = listOf(navArgument("scheduleId") { type = androidx.navigation.NavType.IntType })
+                ) {
+                    val arguments = requireNotNull(it.arguments)
+                    val scheduleId = arguments.getInt("scheduleId")
+                    scheduleId.let {
+                        ItemListScreen(it)
+                    }
                 }
+
             }
         }
     }

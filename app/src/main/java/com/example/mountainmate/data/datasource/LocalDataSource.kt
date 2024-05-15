@@ -25,5 +25,6 @@ class LocalDataSource @Inject constructor(
         checkItemListDao.insertCheckItems(checkItems)
     }
 
+    suspend fun getCheckItemList(scheduleId: Int) = checkItemListDao.getCheckItemList(scheduleId)
 
 }
