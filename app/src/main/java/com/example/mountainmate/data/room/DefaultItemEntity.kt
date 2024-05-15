@@ -14,3 +14,9 @@ data class DefaultItemEntity(
     @ColumnInfo(name = "category")
     val category: Category
 )
+
+fun DefaultItemEntity.convertToCheckItemEntity(scheduleId: Int) = CheckItemEntity(
+    scheduleId = scheduleId,
+    itemName = itemName,
+    category = category,
+)

@@ -13,7 +13,7 @@ interface ScheduleDao {
     suspend fun getAllSchedules(): List<ScheduleEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertSchedule(scheduleEntity: ScheduleEntity)
+    suspend fun insertSchedule(scheduleEntity: ScheduleEntity): Long
 
     @Query("DELETE FROM $SCHEDULE_TABLE_NAME WHERE id = :id")
     suspend fun deleteSchedule(id: Int)

@@ -20,6 +20,10 @@ class ScheduleViewModel @Inject constructor(
     private val _uiState = MutableStateFlow<ScheduleState>(ScheduleState())
     val uiState = _uiState.asStateFlow()
 
+    init {
+        updateScheduleList()
+    }
+
     private fun getDefaultItems() {
         viewModelScope.launch {
             val items = scheduleRepository.getDefaultItems().map { it.itemName }
@@ -43,8 +47,13 @@ class ScheduleViewModel @Inject constructor(
     private fun addSchedule(name: String){
         viewModelScope.launch {
             scheduleRepository.insertSchedule(name)
-            val schedules = scheduleRepository.getAllSchedules().map { it.name }
+            updateScheduleList()
+        }
+    }
 
+    private fun updateScheduleList() {
+        viewModelScope.launch {
+            val schedules = scheduleRepository.getAllSchedules().map { it.name }
             _uiState.update {
                 it.copy(scheduleList = schedules)
             }

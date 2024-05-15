@@ -26,7 +26,7 @@ data class CheckItemEntity(
     @ColumnInfo(name = "item_name")
     val itemName: String,
     @ColumnInfo(name = "is_checked")
-    val isChecked: Boolean,
+    val isChecked: Boolean = false,
     @ColumnInfo(name = "category")
     val category: Category
 )

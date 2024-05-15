@@ -17,6 +17,9 @@ interface CheckItemListDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertCheckItem(checkItemEntity: CheckItemEntity)
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertCheckItems(checkItemEntity: List<CheckItemEntity>)
+
     @Update
     suspend fun updateCheckItem(checkItemEntity: CheckItemEntity)
 
