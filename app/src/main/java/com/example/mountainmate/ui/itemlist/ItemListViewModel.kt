@@ -24,4 +24,19 @@ class ItemListViewModel @Inject constructor(
             }
         }
     }
+
+    private fun deleteItem(itemData: ItemData) {
+        viewModelScope.launch {
+            itemListRepository.deleteCheckItem(itemData)
+        }
+    }
+
+    fun onAction(action : ItemListUiAction) {
+        when(action) {
+            is ItemListUiAction.CheckItem -> {}
+            is ItemListUiAction.DeleteItem -> {
+                deleteItem(action.itemData)
+            }
+        }
+    }
 }

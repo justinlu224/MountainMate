@@ -31,6 +31,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.mountainmate.data.room.Category
+import com.example.mountainmate.data.room.CheckItemEntity
 import com.example.mountainmate.ui.theme.MountainMateTheme
 
 data class SectionData(
@@ -40,9 +42,22 @@ data class SectionData(
 )
 
 data class ItemData(
-    val title: String,
-    val isChecked: Boolean
+    val id: Int = 0,
+    val scheduleId: Int,
+    val itemName: String,
+    val isChecked: Boolean = false,
+    val category: Category,
 )
+
+fun ItemData.convertToCheckItemEntity(): CheckItemEntity {
+    return CheckItemEntity(
+        id = id,
+        scheduleId = scheduleId,
+        itemName = itemName,
+        isChecked = isChecked,
+        category = category
+    )
+}
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
@@ -71,7 +86,10 @@ fun ItemListScreen(
             }
             if (sectionData.isExpend.value) {
                 items(sectionData.items.size) {
-                    SwipeItem(sectionData.items[it].title)
+                    SwipeItem(
+                        sectionData.items[it],
+                        viewModel::onAction
+                    )
                 }
             }
         }
@@ -102,13 +120,17 @@ fun Section(
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
-private fun SwipeItem(s: String) {
+private fun SwipeItem(
+    itemData: ItemData,
+    onAction: (ItemListUiAction) -> Unit
+) {
 
     val state = rememberSwipeToDismissBoxState(
         positionalThreshold = {
             it / 2
         }
     )
+
     var isShow by remember {
         mutableStateOf(true)
     }
@@ -117,25 +139,32 @@ private fun SwipeItem(s: String) {
         println("@@@@@@: stete: ${state.targetValue}")
         if (state.currentValue == SwipeToDismissBoxValue.EndToStart && state.progress == 1f) {
             println("@@@@ DismissedToEnd")
+            onAction(ItemListUiAction.DeleteItem(itemData = itemData))
             isShow = false
         }
     }
-
 
     if (isShow) {
         SwipeToDismissBox(
             state = state,
             enableDismissFromStartToEnd = false,
             backgroundContent = {
-                Text(
-                    textAlign = TextAlign.End,
-                    text = "Delete",
-                    color = Color.White,
+                Row(
                     modifier = Modifier
-                        .fillMaxWidth()
+                        .fillMaxSize()
                         .background(Color.Red)
-                        .padding(vertical = 20.dp)
-                )
+                        .padding(vertical = 20.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        textAlign = TextAlign.End,
+                        text = "Delete",
+                        color = Color.White,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(end = 16.dp)
+                    )
+                }
             }) {
 
             Row(
@@ -151,10 +180,11 @@ private fun SwipeItem(s: String) {
                 )
 
                 Text(
-                    text = s, modifier = Modifier
+                    text = itemData.itemName, modifier = Modifier
                         .fillMaxWidth()
                 )
             }
+
         }
     }
 }
@@ -180,5 +210,19 @@ fun ItemListScreenPreviewNight() {
 fun SectionPreview() {
     MountainMateTheme {
         Section("ssssss")
+    }
+}
+
+@Preview
+@Composable
+fun PreviewSwipeItem() {
+    MountainMateTheme {
+        SwipeItem(
+            ItemData(
+            scheduleId = 1,
+            itemName = "item1",
+            category = Category.CLIMBING
+        )
+        ) {}
     }
 }

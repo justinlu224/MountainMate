@@ -17,12 +17,20 @@ class ItemListRepository @Inject constructor(
                     title = it.key.name,
                     items = it.value.map { checkItemEntity ->
                         ItemData(
-                            title = checkItemEntity.itemName,
-                            isChecked = checkItemEntity.isChecked
+                            id = checkItemEntity.id,
+                            scheduleId = checkItemEntity.scheduleId,
+                            itemName = checkItemEntity.itemName,
+                            isChecked = checkItemEntity.isChecked,
+                            category = checkItemEntity.category
                         )
                     }
                 )
             }
+    }
+
+    suspend fun deleteCheckItem(itemData: ItemData) {
+        val checkItemEntity = itemData.convertToCheckItemEntity()
+        localDataSource.deleteCheckItem(checkItemEntity)
     }
 
 }
