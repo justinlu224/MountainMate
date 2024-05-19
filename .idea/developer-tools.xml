@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DeveloperToolsToolWindowSettingsV1" lastSelectedContentNodeId="time-conversion">
+    <developerToolsConfigurations>
+      <developerToolConfiguration developerToolId="text-statistic" id="22cb68f6-809f-42dc-95a5-cae6151a642b" name="Workbench">
+        <properties>
+          <property key="text" type="INPUT" value="kotlin.String|private fun updateScheduleList() {&#10;        viewModelScope.launch {&#10;            val schedules = scheduleRepository.getAllSchedules()&#10;            _uiState.update {&#10;                it.copy(scheduleList = schedules)&#10;            }&#10;        }&#10;    }" />
+        </properties>
+      </developerToolConfiguration>
+      <developerToolConfiguration developerToolId="code-style-formatting" id="9507a114-80b9-4f10-bfec-4122dc5d1a3c" name="Workbench">
+        <properties>
+          <property key="languageId" type="CONFIGURATION" value="kotlin.String|kotlin" />
+        </properties>
+      </developerToolConfiguration>
+    </developerToolsConfigurations>
+  </component>
+</project>
