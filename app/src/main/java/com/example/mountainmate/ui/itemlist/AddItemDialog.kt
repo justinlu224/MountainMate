@@ -1,4 +1,4 @@
-package com.example.mountainmate.ui.schedule
+package com.example.mountainmate.ui.itemlist
 
 import android.content.res.Configuration
 import androidx.compose.foundation.background
@@ -29,13 +29,16 @@ import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.constraintlayout.compose.ConstraintLayout
+import com.example.mountainmate.data.room.Category
+import com.example.mountainmate.ui.schedule.AddScheduleDialog
 import com.example.mountainmate.ui.theme.MountainMateTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AddScheduleDialog(
+fun AddItemDialog(
     openDialog: MutableState<Boolean>,
-    onAction: (ScheduleUiAction) -> Unit = {}
+    menuItems: List<Category>,
+    onAction: (ItemListUiAction) -> Unit = {}
 ) {
     if (!openDialog.value) return
 
@@ -47,6 +50,7 @@ fun AddScheduleDialog(
         }
     ) {
         var typetext by remember { mutableStateOf("") }
+        var selectCategory by remember { mutableStateOf(Category.CAMPING) }
 
         ConstraintLayout(
             modifier = Modifier
@@ -68,7 +72,7 @@ fun AddScheduleDialog(
                     end.linkTo(parent.end)
                 },
                 color = MaterialTheme.colorScheme.onSecondary,
-                text = "新增行程",
+                text = "新增項目",
                 style = MaterialTheme.typography.titleLarge
             )
             TextField(
@@ -86,11 +90,42 @@ fun AddScheduleDialog(
                     typetext = it
                 }
             )
+            Box(modifier = Modifier
+                .constrainAs(category) {
+                    top.linkTo(textField.bottom)
+                    end.linkTo(parent.end)
+                }
+                .padding(end = 16.dp)) {
+                Text(
+                    text = selectCategory.name,
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSecondary,
+                    modifier = Modifier
+                        .border(1.dp, color = MaterialTheme.colorScheme.onSecondary, RoundedCornerShape(8.dp))
+                        .padding(horizontal = 6.dp, vertical = 2.dp)
+                        .clickable {
+                            openMenu = true
+                        }
+                )
+                    DropdownMenu(
+                        expanded = openMenu,
+                        offset = DpOffset(0.dp,8.dp),
+                        onDismissRequest = { }
+                    ) {
+
+                        menuItems.forEachIndexed { index, category ->
+                            DropdownMenuItem(text = { Text(text = category.name) }, onClick = {
+                                openMenu = false
+                                selectCategory = category
+                            })
+                        }
+                    }
+            }
 
             Button(
                 onClick = {
                     openDialog.value = false
-                    onAction(ScheduleUiAction.AddSchedule(typetext))
+                    onAction(ItemListUiAction.AddItem(typetext, selectCategory))
                 },
                 modifier = Modifier
                     .constrainAs(btnConfirm) {

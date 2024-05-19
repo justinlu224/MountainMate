@@ -35,15 +35,16 @@ fun ScheduleScreen(
 ) {
 
     val uiState by scheduleViewModel.uiState.collectAsState()
+    val openDialog = remember {
+        mutableStateOf(false)
+    }
 
     Box(
         modifier = modifier
             .background(Color.White)
             .fillMaxSize()
     ) {
-        val openDialog = remember {
-            mutableStateOf(false)
-        }
+
         LazyVerticalGrid(
             columns = GridCells.Fixed(2),
             horizontalArrangement = Arrangement.spacedBy(16.dp),

@@ -1,6 +1,8 @@
 package com.example.mountainmate.ui.itemlist
 
 import com.example.mountainmate.data.datasource.LocalDataSource
+import com.example.mountainmate.data.room.Category
+import com.example.mountainmate.data.room.CheckItemEntity
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -35,6 +37,16 @@ class ItemListRepository @Inject constructor(
 
     suspend fun updateCheckState(itemId: Int, iscCheck: Boolean) {
         localDataSource.updateCheckState(itemId, iscCheck)
+    }
+
+    suspend fun insertCheckItem(scheduleId: Int, itemName: String, category: Category) {
+        localDataSource.insertCheckItem(
+            checkItemEntity = CheckItemEntity(
+                scheduleId = scheduleId,
+                itemName = itemName,
+                category = category,
+            )
+        )
     }
 
 }

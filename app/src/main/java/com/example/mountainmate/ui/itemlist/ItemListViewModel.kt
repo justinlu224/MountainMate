@@ -2,6 +2,7 @@ package com.example.mountainmate.ui.itemlist
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.mountainmate.data.room.Category
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -41,6 +42,23 @@ class ItemListViewModel @Inject constructor(
             }
             is ItemListUiAction.DeleteItem -> {
                 deleteItem(action.itemData)
+            }
+
+            is ItemListUiAction.AddItem -> {
+                addItem(action.itemName, action.category)
+            }
+        }
+    }
+
+    private fun addItem(itemName: String, category: Category) {
+        viewModelScope.launch {
+            scheduleId?.let {
+                itemListRepository.insertCheckItem(
+                        scheduleId = it,
+                        itemName = itemName,
+                        category = category
+                )
+                updateCheckItemList(it)
             }
         }
     }

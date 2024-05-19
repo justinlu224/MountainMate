@@ -9,8 +9,12 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SwipeToDismissBox
 import androidx.compose.material3.SwipeToDismissBoxValue
@@ -71,28 +75,51 @@ fun ItemListScreen(
         viewModel.updateCheckItemList(scheduleId)
     }
 
+    val openDialog = remember {
+        mutableStateOf(false)
+    }
+
     val uiState by viewModel.uiState.collectAsState()
+    Box(modifier = Modifier.fillMaxSize()) {
+        LazyColumn(
+            modifier = Modifier.fillMaxSize()
+        ) {
 
-    LazyColumn(
-        modifier = Modifier.fillMaxSize()
-    ) {
+            uiState.checkItemList.forEach { sectionData ->
 
-        uiState.checkItemList.forEach { sectionData ->
-
-            stickyHeader {
-                Section(sectionData = sectionData.title) {
-                    sectionData.isExpend.value = !sectionData.isExpend.value
+                stickyHeader {
+                    Section(sectionData = sectionData.title) {
+                        sectionData.isExpend.value = !sectionData.isExpend.value
+                    }
                 }
-            }
-            if (sectionData.isExpend.value) {
-                items(sectionData.items.size) {
-                    SwipeItem(
-                        sectionData.items[it],
-                        viewModel::onAction
-                    )
+                if (sectionData.isExpend.value) {
+                    items(sectionData.items.size) {
+                        SwipeItem(
+                            sectionData.items[it],
+                            viewModel::onAction
+                        )
+                    }
                 }
             }
         }
+
+        FloatingActionButton(
+            modifier = Modifier
+                .padding(24.dp)
+                .align(Alignment.BottomEnd),
+            onClick = {
+                openDialog.value = true
+            }
+        ) {
+            Icon(Icons.Filled.Add, contentDescription = "Add")
+        }
+
+        AddItemDialog(
+            openDialog = openDialog,
+            menuItems = Category.values().toList(),
+            viewModel::onAction
+        )
+
     }
 }
 
