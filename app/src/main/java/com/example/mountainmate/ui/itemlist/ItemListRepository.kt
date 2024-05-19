@@ -33,4 +33,8 @@ class ItemListRepository @Inject constructor(
         localDataSource.deleteCheckItem(checkItemEntity)
     }
 
+    suspend fun updateCheckState(itemId: Int, iscCheck: Boolean) {
+        localDataSource.updateCheckState(itemId, iscCheck)
+    }
+
 }

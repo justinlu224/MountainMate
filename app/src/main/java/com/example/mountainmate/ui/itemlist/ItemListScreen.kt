@@ -174,8 +174,8 @@ private fun SwipeItem(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Checkbox(
-                    checked = false, onCheckedChange = {
-                        // todo
+                    checked = itemData.isChecked, onCheckedChange = {
+                        onAction(ItemListUiAction.CheckItem(itemId = itemData.id, isCheck = it))
                     }
                 )
 

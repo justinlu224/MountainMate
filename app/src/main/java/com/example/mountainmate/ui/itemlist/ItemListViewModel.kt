@@ -16,7 +16,9 @@ class ItemListViewModel @Inject constructor(
 
     private val _uiState = MutableStateFlow<ItemListUiState>(ItemListUiState())
     val uiState = _uiState.asStateFlow()
+    private var scheduleId: Int? = null
     fun updateCheckItemList(scheduleId: Int) {
+        this.scheduleId = scheduleId
         viewModelScope.launch {
             val checkItemList = itemListRepository.getCheckItemList(scheduleId)
             _uiState.update {
@@ -28,15 +30,25 @@ class ItemListViewModel @Inject constructor(
     private fun deleteItem(itemData: ItemData) {
         viewModelScope.launch {
             itemListRepository.deleteCheckItem(itemData)
+            scheduleId?.let { updateCheckItemList(it) }
         }
     }
 
     fun onAction(action : ItemListUiAction) {
         when(action) {
-            is ItemListUiAction.CheckItem -> {}
+            is ItemListUiAction.CheckItem -> {
+                updateCheckState(action.itemId, action.isCheck)
+            }
             is ItemListUiAction.DeleteItem -> {
                 deleteItem(action.itemData)
             }
+        }
+    }
+
+    private fun updateCheckState(itemId: Int, check: Boolean) {
+        viewModelScope.launch {
+            itemListRepository.updateCheckState(itemId, check)
+            scheduleId?.let { updateCheckItemList(it) }
         }
     }
 }

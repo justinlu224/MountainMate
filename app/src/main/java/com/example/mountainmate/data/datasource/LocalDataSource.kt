@@ -30,4 +30,8 @@ class LocalDataSource @Inject constructor(
         checkItemListDao.deleteCheckItem(checkItemEntity)
     }
 
+    suspend fun updateCheckState(itemId: Int, isCheck: Boolean) {
+        checkItemListDao.updateCheckState(itemId, isCheck)
+    }
+
 }

@@ -25,4 +25,6 @@ interface CheckItemListDao {
 
     @Delete
     suspend fun deleteCheckItem(checkItemEntity: CheckItemEntity)
+    @Query("UPDATE $CHECK_ITEM_TABLE_NAME SET is_checked = :isCheck WHERE id = :itemId")
+    suspend fun updateCheckState(itemId: Int, isCheck: Boolean)
 }
