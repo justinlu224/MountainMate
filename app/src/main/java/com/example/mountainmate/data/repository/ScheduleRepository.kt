@@ -19,4 +19,5 @@ class ScheduleRepository @Inject constructor(
     }
 
     suspend fun getAllSchedules() = localDataSource.getAllSchedules()
+    suspend fun deleteSchedule(id: Int) = localDataSource.deleteSchedule(id)
 }

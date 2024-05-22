@@ -4,4 +4,5 @@ import com.example.mountainmate.data.room.ScheduleEntity
 
 data class ScheduleState(
     val scheduleList: List<ScheduleEntity> = mutableListOf(),
+    val openDeleteDialog: Boolean = false,
 )

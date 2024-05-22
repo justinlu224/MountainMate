@@ -38,4 +38,6 @@ class LocalDataSource @Inject constructor(
         checkItemListDao.updateCheckState(itemId, isCheck)
     }
 
+    suspend fun deleteSchedule(id: Int) = scheduleDao.deleteSchedule(id)
+
 }

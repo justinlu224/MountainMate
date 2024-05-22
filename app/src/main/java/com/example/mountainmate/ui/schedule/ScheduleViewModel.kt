@@ -22,14 +22,42 @@ class ScheduleViewModel @Inject constructor(
         updateScheduleList()
     }
 
+    private var deleteScheduleId: Int? = null
+
     fun onAction(action: ScheduleUiAction) {
         when(action) {
             is ScheduleUiAction.AddSchedule -> {
                 addSchedule(action.name)
             }
-            ScheduleUiAction.ClickItem -> {
-
+            is ScheduleUiAction.OpenDeleteDialog -> {
+                _uiState.update {
+                    it.copy(openDeleteDialog = true)
+                }
+                deleteScheduleId = action.id
             }
+
+            is ScheduleUiAction.DeleteSchedule -> {
+                _uiState.update {
+                    it.copy(openDeleteDialog = false)
+                }
+                deleteScheduleId?.let {
+                    deleteSchedule(it)
+                }
+            }
+
+            ScheduleUiAction.DismissDeleteDialog -> {
+                _uiState.update {
+                    it.copy(openDeleteDialog = false)
+                }
+                deleteScheduleId = null
+            }
+        }
+    }
+
+    private fun deleteSchedule(id: Int) {
+        viewModelScope.launch {
+            scheduleRepository.deleteSchedule(id)
+            updateScheduleList()
         }
     }
 

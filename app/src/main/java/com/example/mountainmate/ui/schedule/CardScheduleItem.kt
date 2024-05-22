@@ -1,7 +1,8 @@
 package com.example.mountainmate.ui.schedule
 
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -19,8 +20,13 @@ import androidx.navigation.compose.rememberNavController
 import com.example.mountainmate.Screen
 import com.example.mountainmate.data.room.ScheduleEntity
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun CardScheduleItem(scheduleEntity: ScheduleEntity, navController: NavHostController) {
+fun CardScheduleItem(
+    scheduleEntity: ScheduleEntity,
+    navController: NavHostController,
+    onAction: (ScheduleUiAction) -> Unit = { }
+) {
     Surface(
         modifier = Modifier
             .size(120.dp, 120.dp),
@@ -30,10 +36,17 @@ fun CardScheduleItem(scheduleEntity: ScheduleEntity, navController: NavHostContr
         tonalElevation = 6.dp,
         border = BorderStroke(2.dp, MaterialTheme.colorScheme.onSecondary)
     ) {
-        Box(modifier = Modifier
-            .clickable {
-                navController.navigate("${Screen.ItemList.route}/${scheduleEntity.id}")
-            }
+        Box(
+            modifier = Modifier
+            .combinedClickable(
+                onClick = {
+                    navController.navigate("${Screen.ItemList.route}/${scheduleEntity.id}")
+                },
+                onLongClick = {
+                    onAction(ScheduleUiAction.OpenDeleteDialog(scheduleEntity.id))
+                }
+            )
+
             ) {
             Text(
                 text = scheduleEntity.name,
