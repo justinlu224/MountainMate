@@ -31,6 +31,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.mountainmate.ui.home.HomeScreen
+import com.example.mountainmate.ui.home.HomeWebViewScreen
 import com.example.mountainmate.ui.itemlist.ItemListScreen
 import com.example.mountainmate.ui.schedule.ScheduleScreen
 import com.example.mountainmate.ui.theme.MountainMateTheme
@@ -41,6 +42,8 @@ sealed class Screen(val route: String, @StringRes val resourceId: Int, val icon:
     data object Schedule : Screen("Schedule", R.string.schedule, Icons.Default.List)
 
     data object ItemList : Screen("ItemList", R.string.item_list)
+
+    data object HomeWebView : Screen("HomeWebView", R.string.home_web_title)
 }
 
 @AndroidEntryPoint
@@ -107,7 +110,7 @@ class MainActivity : ComponentActivity() {
         ) { paddingValues ->
             NavHost(navController = navController, startDestination = Screen.Home.route, modifier = Modifier.padding(paddingValues)) {
                 composable(Screen.Home.route) {
-                    HomeScreen()
+                    HomeScreen(navController)
                 }
                 composable(Screen.Schedule.route) {
                     ScheduleScreen(navController)
@@ -121,6 +124,17 @@ class MainActivity : ComponentActivity() {
                     val scheduleId = arguments.getInt("scheduleId")
                     scheduleId.let {
                         ItemListScreen(it)
+                    }
+                }
+
+                composable(
+                    "${Screen.HomeWebView.route}/{url}",
+                    arguments = listOf(navArgument("url") { type = androidx.navigation.NavType.StringType })
+                ) {
+                    val argument = requireNotNull(it.arguments)
+                    val url = argument.getString("url")
+                    url?.let {
+                        HomeWebViewScreen(it)
                     }
                 }
 
