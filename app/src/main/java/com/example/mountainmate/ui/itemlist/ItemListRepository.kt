@@ -13,10 +13,12 @@ class ItemListRepository @Inject constructor(
 
     suspend fun getCheckItemList(scheduleId: Int): List<SectionData> {
         val checkItems = localDataSource.getCheckItemList(scheduleId)
-       return checkItems.groupBy { it.category }
+       return checkItems
+           .sortedBy { it.category.sort }
+           .groupBy { it.category }
             .map {
                 SectionData(
-                    title = it.key.name,
+                    title = it.key.title,
                     items = it.value.map { checkItemEntity ->
                         ItemData(
                             id = checkItemEntity.id,

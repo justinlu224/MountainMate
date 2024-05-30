@@ -50,7 +50,7 @@ fun AddItemDialog(
         }
     ) {
         var typetext by remember { mutableStateOf("") }
-        var selectCategory by remember { mutableStateOf(Category.CAMPING) }
+        var selectCategory by remember { mutableStateOf(Category.SLEEPING) }
 
         ConstraintLayout(
             modifier = Modifier

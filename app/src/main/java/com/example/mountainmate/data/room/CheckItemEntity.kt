@@ -31,10 +31,10 @@ data class CheckItemEntity(
     val category: Category
 )
 
-enum class Category {
-    CAMPING,
-    HIKING,
-    CLIMBING,
-    SKIING,
-    OTHER
+enum class Category(val title: String, val sort: Int) {
+    SLEEPING("睡眠系統", 1),
+    FOOD("炊煮與食材系統", 2),
+    WARM("保暖系統", 3),
+    SAFE("醫藥求生", 4),
+    OTHER("其他裝備", 5)
 }

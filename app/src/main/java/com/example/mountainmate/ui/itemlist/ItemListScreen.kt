@@ -132,7 +132,7 @@ fun Section(
         modifier = Modifier
             .fillMaxWidth()
             .background(MaterialTheme.colorScheme.primary)
-            .padding(vertical = 20.dp)
+            .padding(vertical = 12.dp)
             .clickable {
                 onClick()
             }
@@ -248,7 +248,7 @@ fun PreviewSwipeItem() {
             ItemData(
             scheduleId = 1,
             itemName = "item1",
-            category = Category.CLIMBING
+            category = Category.FOOD
         )
         ) {}
     }
