@@ -30,7 +30,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.example.mountainmate.data.room.Category
-import com.example.mountainmate.ui.schedule.AddScheduleDialog
 import com.example.mountainmate.ui.theme.MountainMateTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -156,8 +155,9 @@ fun AddItemDialog(
 fun AddScheduleDialogPreview() {
     val openDialog = remember { mutableStateOf(true) }
     MountainMateTheme {
-        AddScheduleDialog(
-            openDialog
+        AddItemDialog(
+            openDialog,
+            listOf(Category.FOOD, Category.WARM)
         )
     }
 }
@@ -167,8 +167,9 @@ fun AddScheduleDialogPreview() {
 fun AddScheduleDialogPreviewNight() {
     val openDialog = remember { mutableStateOf(true) }
     MountainMateTheme {
-        AddScheduleDialog(
-            openDialog
+        AddItemDialog(
+            openDialog,
+            listOf(Category.FOOD, Category.WARM)
         )
     }
 }

@@ -36,8 +36,8 @@ import androidx.navigation.compose.rememberNavController
 @Composable
 fun ScheduleScreen(
     navController: NavHostController,
-    scheduleViewModel: ScheduleViewModel = hiltViewModel(),
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    scheduleViewModel: ScheduleViewModel = hiltViewModel()
 ) {
 
     val uiState by scheduleViewModel.uiState.collectAsStateWithLifecycle()

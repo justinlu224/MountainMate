@@ -18,7 +18,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.mountainmate.data.room.ScheduleEntity
-import com.example.mountainmate.ui.navhost.RouteItemList
+import com.example.mountainmate.ui.navhost.RouteScheduleDetail
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -40,7 +40,7 @@ fun CardScheduleItem(
             modifier = Modifier
             .combinedClickable(
                 onClick = {
-                    navController.navigate(RouteItemList(scheduleEntity.id))
+                    navController.navigate(RouteScheduleDetail(scheduleEntity.name, scheduleEntity.id))
                 },
                 onLongClick = {
                     onAction(ScheduleUiAction.OpenDeleteDialog(scheduleEntity.id))

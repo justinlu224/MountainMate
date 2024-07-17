@@ -36,7 +36,9 @@ import com.example.mountainmate.ui.itemlist.ItemListScreen
 import com.example.mountainmate.ui.navhost.RouteHome
 import com.example.mountainmate.ui.navhost.RouteItemList
 import com.example.mountainmate.ui.navhost.RouteSchedule
+import com.example.mountainmate.ui.navhost.RouteScheduleDetail
 import com.example.mountainmate.ui.navhost.RouteWebView
+import com.example.mountainmate.ui.schedule.ScheduleDetailScreen
 import com.example.mountainmate.ui.schedule.ScheduleScreen
 import com.example.mountainmate.ui.theme.MountainMateTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -134,6 +136,14 @@ class MainActivity : ComponentActivity() {
                     val url = routeWebView.url
                     HomeWebViewScreen(url)
                 }
+                
+                composable<RouteScheduleDetail> {
+                    val routeScheduleDetail = it.toRoute<RouteScheduleDetail>()
+                    ScheduleDetailScreen(
+                        scheduleDetail = routeScheduleDetail,
+                        navHostController = navController
+                    )
+                }
 
             }
         }
@@ -142,6 +152,8 @@ class MainActivity : ComponentActivity() {
     @Preview(showBackground = true, showSystemUi = true)
     @Composable
     fun PreviewMainScreen() {
-        MainScreen()
+        MountainMateTheme {
+            MainScreen()
+        }
     }
 }
