@@ -29,16 +29,22 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navArgument
+import androidx.navigation.toRoute
 import com.example.mountainmate.ui.home.HomeScreen
 import com.example.mountainmate.ui.home.HomeWebViewScreen
 import com.example.mountainmate.ui.itemlist.ItemListScreen
+import com.example.mountainmate.ui.navhost.RouteHome
+import com.example.mountainmate.ui.navhost.RouteItemList
+import com.example.mountainmate.ui.navhost.RouteSchedule
+import com.example.mountainmate.ui.navhost.RouteWebView
 import com.example.mountainmate.ui.schedule.ScheduleScreen
 import com.example.mountainmate.ui.theme.MountainMateTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 sealed class Screen(val route: String, @StringRes val resourceId: Int, val icon: ImageVector? = null) {
+
     data object Home : Screen("Home", R.string.home, Icons.Default.Home)
+
     data object Schedule : Screen("Schedule", R.string.schedule, Icons.Default.List)
 
     data object ItemList : Screen("ItemList", R.string.item_list)
@@ -50,6 +56,7 @@ sealed class Screen(val route: String, @StringRes val resourceId: Int, val icon:
 class MainActivity : ComponentActivity() {
 
     private val screens = listOf<Screen>(Screen.Home, Screen.Schedule)
+    private val bottomItemRoute = listOf(RouteHome, RouteSchedule)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -70,7 +77,7 @@ class MainActivity : ComponentActivity() {
 
         LaunchedEffect(key1 = Unit) {
             navController.addOnDestinationChangedListener { _, destination, _ ->
-                showBottomBar = destination.route in listOf(Screen.Home.route, Screen.Schedule.route)
+                showBottomBar = destination.route in listOf(RouteHome::class.qualifiedName, RouteSchedule::class.qualifiedName)
             }
         }
 
@@ -83,11 +90,11 @@ class MainActivity : ComponentActivity() {
                     val navBackStackEntry by navController.currentBackStackEntryAsState()
                     val currentDestination = navBackStackEntry?.destination
 
-                    screens.forEachIndexed { _, screen ->
+                    bottomItemRoute.forEachIndexed { index, item ->
                         NavigationBarItem(
-                            selected = currentDestination?.route == screen.route,
+                            selected = currentDestination?.route == item::class.qualifiedName,
                             onClick = {
-                                      navController.navigate(screen.route){
+                                      navController.navigate(item){
                                           popUpTo(navController.graph.findStartDestination().id) {
                                               saveState = true
                                           }
@@ -96,11 +103,11 @@ class MainActivity : ComponentActivity() {
                                       }
                             },
                             icon = {
-                                Icon(imageVector = screen.icon!!, contentDescription = screen.route)
+                                Icon(imageVector = this@MainActivity.screens[index].icon!!, contentDescription = this@MainActivity.screens[index].route)
                             },
                             label = {
                                 Text(
-                                    text = stringResource(id = screen.resourceId)
+                                    text = stringResource(id = this@MainActivity.screens[index].resourceId)
                                 )
                             }
                         )
@@ -108,34 +115,24 @@ class MainActivity : ComponentActivity() {
                 }
             }
         ) { paddingValues ->
-            NavHost(navController = navController, startDestination = Screen.Home.route, modifier = Modifier.padding(paddingValues)) {
-                composable(Screen.Home.route) {
+            NavHost(navController = navController, startDestination = RouteHome, modifier = Modifier.padding(paddingValues)) {
+                composable<RouteHome> {
                     HomeScreen(navController)
                 }
-                composable(Screen.Schedule.route) {
+                composable<RouteSchedule> {
                     ScheduleScreen(navController)
                 }
 
-                composable(
-                    "${Screen.ItemList.route}/{scheduleId}",
-                    arguments = listOf(navArgument("scheduleId") { type = androidx.navigation.NavType.IntType })
-                ) {
-                    val arguments = requireNotNull(it.arguments)
-                    val scheduleId = arguments.getInt("scheduleId")
-                    scheduleId.let {
-                        ItemListScreen(it)
-                    }
+                composable<RouteItemList> {
+                    val routeItemList =  it.toRoute<RouteItemList>()
+                    val scheduleId = routeItemList.scheduleId
+                    ItemListScreen(scheduleId)
                 }
 
-                composable(
-                    "${Screen.HomeWebView.route}/{url}",
-                    arguments = listOf(navArgument("url") { type = androidx.navigation.NavType.StringType })
-                ) {
-                    val argument = requireNotNull(it.arguments)
-                    val url = argument.getString("url")
-                    url?.let {
-                        HomeWebViewScreen(it)
-                    }
+                composable<RouteWebView> {
+                    val routeWebView = it.toRoute<RouteWebView>()
+                    val url = routeWebView.url
+                    HomeWebViewScreen(url)
                 }
 
             }

@@ -3,6 +3,7 @@ plugins {
     id("org.jetbrains.kotlin.android")
     id("com.google.devtools.ksp")
     id("com.google.dagger.hilt.android")
+    kotlin("plugin.serialization") version "2.0.0"
 }
 
 android {
@@ -68,7 +69,7 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-test-manifest")
 
     // navigation
-    val nav_version = "2.7.7"
+    val nav_version = "2.8.0-beta05"
     implementation("androidx.navigation:navigation-compose:$nav_version")
     // constraintlayout
     implementation ("androidx.constraintlayout:constraintlayout-compose:1.0.1")
@@ -86,4 +87,6 @@ dependencies {
     implementation("com.google.dagger:hilt-android:2.51")
     ksp("com.google.dagger:hilt-compiler:2.51.1")
     implementation ("androidx.hilt:hilt-navigation-compose:1.2.0")
+
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3")
 }

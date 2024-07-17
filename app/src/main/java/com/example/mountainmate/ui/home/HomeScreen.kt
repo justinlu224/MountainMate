@@ -28,8 +28,7 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.example.mountainmate.Screen
-import java.net.URLEncoder
+import com.example.mountainmate.ui.navhost.RouteWebView
 
 enum class HomePage(val title: String, val url: String) {
     YUSHAN("玉山國家公園", "https://www.ysnp.gov.tw/"),
@@ -48,8 +47,7 @@ fun HomeScreen(navController: NavHostController) {
     ) {
         items(homePages.size) { index ->
             HomePageItem(homePages[index]){
-                val url = URLEncoder.encode(homePages[index].url, "UTF-8")
-                navController.navigate("${Screen.HomeWebView.route}/$url")
+                navController.navigate(RouteWebView(homePages[index].url))
             }
         }
     }
