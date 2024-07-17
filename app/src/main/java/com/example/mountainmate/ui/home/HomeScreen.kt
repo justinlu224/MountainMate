@@ -98,7 +98,11 @@ fun HomeWebViewScreen(url: String) {
                 },
             factory = {
                 WebView(it).apply {
-                    settings.javaScriptEnabled = true
+                    with(settings) {
+                        javaScriptEnabled = true
+                        useWideViewPort = true
+                        loadWithOverviewMode = true
+                    }
                     webViewClient = WebViewClient()
                 }
             },
