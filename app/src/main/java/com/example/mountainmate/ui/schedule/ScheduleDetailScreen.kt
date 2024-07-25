@@ -11,9 +11,11 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -46,6 +48,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.mountainmate.ui.navhost.RouteItemList
 import com.example.mountainmate.ui.navhost.RouteScheduleDetail
 import com.example.mountainmate.ui.theme.MountainMateTheme
+import com.example.mountainmate.util.DateUtil
 
 sealed class ScheduleDetailAction {
     data object CheckUserLocationPermission : ScheduleDetailAction()
@@ -60,7 +63,7 @@ fun ScheduleDetailScreen(
     scheduleDetail: RouteScheduleDetail,
     navHostController: NavHostController,
     viewModel: ScheduleDetailViewModel = hiltViewModel()
-    ) {
+) {
 
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
@@ -94,13 +97,19 @@ fun ScheduleDetailScreen(
     }
 
     LaunchedEffect(key1 = Unit) {
+        viewModel.scheduleId = scheduleDetail.scheduleId
+        viewModel.getScheduleLogs(scheduleDetail.scheduleId)
+
         viewModel.eventsFlow.flowWithLifecycle(lifecycleOwner.lifecycle)
             .collect { event ->
                 when (event) {
                     is ScheduleDetailViewModel.Event.CheckUserLocationPermission -> {
-                        locationPermissionRequest.launch(arrayOf(
-                            Manifest.permission.ACCESS_FINE_LOCATION,
-                            Manifest.permission.ACCESS_COARSE_LOCATION))
+                        locationPermissionRequest.launch(
+                            arrayOf(
+                                Manifest.permission.ACCESS_FINE_LOCATION,
+                                Manifest.permission.ACCESS_COARSE_LOCATION
+                            )
+                        )
                     }
                 }
             }
@@ -187,7 +196,7 @@ private fun Content(
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
 
-                items(100) {
+                items(uiState.scheduleLogs.size) {
                     Row(
                         modifier = Modifier
                             .fillMaxWidth(),
@@ -198,17 +207,29 @@ private fun Content(
                             text = "・",
                             color = MaterialTheme.colorScheme.tertiary,
                         )
-                        // fake ui
-                        Text(
-                            text = "2024/01/01 12:12",
-                            color = MaterialTheme.colorScheme.tertiary,
-                            fontSize = 10.sp
-                        )
-                        // fake ui
-                        Text(
-                            text = "到達營地",
-                            color = MaterialTheme.colorScheme.tertiary
-                        )
+
+                        Column {
+                            Row {
+                                Text(
+                                    text = DateUtil.convertTimeStampToStringWithYearAndTime(uiState.scheduleLogs[it].time),
+                                    color = MaterialTheme.colorScheme.tertiary,
+                                    fontSize = 10.sp
+                                )
+
+                                if (uiState.scheduleLogs[it].latitude != null && uiState.scheduleLogs[it].longitude != null) {
+                                    Spacer(modifier = Modifier.width(4.dp))
+                                    Text(
+                                        text = "(${uiState.scheduleLogs[it].latitude} , ${uiState.scheduleLogs[it].longitude})",
+                                        color = MaterialTheme.colorScheme.tertiary,
+                                        fontSize = 10.sp
+                                    )
+                                }
+                            }
+                            Text(
+                                text = uiState.scheduleLogs[it].description,
+                                color = MaterialTheme.colorScheme.tertiary
+                            )
+                        }
                     }
                 }
 

@@ -5,6 +5,7 @@ import com.example.mountainmate.data.room.CheckItemListDao
 import com.example.mountainmate.data.room.DefaultItemDao
 import com.example.mountainmate.data.room.ScheduleDao
 import com.example.mountainmate.data.room.ScheduleEntity
+import com.example.mountainmate.data.room.ScheduleLogEntity
 import javax.inject.Inject
 
 class LocalDataSource @Inject constructor(
@@ -39,5 +40,9 @@ class LocalDataSource @Inject constructor(
     }
 
     suspend fun deleteSchedule(id: Int) = scheduleDao.deleteSchedule(id)
+
+    suspend fun insertScheduleLog(scheduleLogEntity: ScheduleLogEntity) = scheduleDao.insertScheduleLog(scheduleLogEntity)
+
+    suspend fun getScheduleLogs(scheduleId: Int) = scheduleDao.getScheduleLogs(scheduleId)
 
 }

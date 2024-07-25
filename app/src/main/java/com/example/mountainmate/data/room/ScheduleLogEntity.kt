@@ -23,7 +23,7 @@ data class ScheduleLogEntity(
     @ColumnInfo("schedule_id")
     val scheduleId: Int,
     @ColumnInfo("time")
-    val time: Int,
+    val time: Long,
     @ColumnInfo("longitude")
     val longitude: Double? = null,
     @ColumnInfo("latitude")
