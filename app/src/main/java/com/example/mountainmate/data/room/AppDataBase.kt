@@ -5,7 +5,7 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 
 @TypeConverters(TypeConverts::class)
-@Database(entities = [DefaultItemEntity::class, ScheduleEntity::class, CheckItemEntity::class], version = 1)
+@Database(entities = [DefaultItemEntity::class, ScheduleEntity::class, CheckItemEntity::class, ScheduleLogEntity::class], version = 1)
 abstract class AppDataBase : RoomDatabase() {
     abstract fun defaultItemDao(): DefaultItemDao
     abstract fun scheduleDao(): ScheduleDao

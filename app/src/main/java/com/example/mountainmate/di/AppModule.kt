@@ -19,6 +19,7 @@ const val DATABASE_NAME = "app_database"
 const val SCHEDULE_TABLE_NAME = "schedule_table"
 const val DEFAULT_ITEM_TABLE_NAME = "default_item_table"
 const val CHECK_ITEM_TABLE_NAME = "check_item_table"
+const val SCHEDULE_LOG_TABLE_NAME = "schedule_log_table_name"
 @Module
 @InstallIn(SingletonComponent::class)
 object AppModule {
