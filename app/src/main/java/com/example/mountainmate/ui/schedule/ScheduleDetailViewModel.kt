@@ -2,6 +2,7 @@ package com.example.mountainmate.ui.schedule
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.mountainmate.util.LocationHelper
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -15,7 +16,9 @@ data class ScheduleDetailUiState(
     val showDialog: Boolean = false
 )
 @HiltViewModel
-class ScheduleDetailViewModel @Inject constructor(): ViewModel() {
+class ScheduleDetailViewModel @Inject constructor(
+    private val locationHelper: LocationHelper
+): ViewModel() {
 
     private val _uiState = MutableStateFlow(ScheduleDetailUiState())
     val uiState = _uiState.asStateFlow()

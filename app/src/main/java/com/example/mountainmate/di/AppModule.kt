@@ -6,6 +6,9 @@ import androidx.room.RoomDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.example.mountainmate.data.room.AppDataBase
 import com.example.mountainmate.data.room.Category
+import com.example.mountainmate.util.LocationHelper
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -35,6 +38,19 @@ object AppModule {
                 }
             })
             .build()
+    }
+
+    @Provides
+    @Singleton
+    fun providesFusedLocationProviderClient(
+        application: Application
+    ): FusedLocationProviderClient =
+        LocationServices.getFusedLocationProviderClient(application)
+
+    @Provides
+    @Singleton
+    fun provideLocationHelper(fusedLocationProviderClient: FusedLocationProviderClient, application: Application) : LocationHelper {
+        return LocationHelper(fusedLocationProviderClient, application)
     }
 }
 
