@@ -1,7 +1,10 @@
 package com.example.mountainmate.ui.schedule
 
+import android.Manifest
 import android.content.res.Configuration.UI_MODE_NIGHT_NO
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -24,6 +27,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -34,7 +38,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.flowWithLifecycle
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.mountainmate.ui.navhost.RouteItemList
@@ -42,7 +48,10 @@ import com.example.mountainmate.ui.navhost.RouteScheduleDetail
 import com.example.mountainmate.ui.theme.MountainMateTheme
 
 sealed class ScheduleDetailAction {
+    data object CheckUserLocationPermission : ScheduleDetailAction()
     data class ShowRecordDialog(val show: Boolean) : ScheduleDetailAction()
+
+    data class AccessLocalPermission(val access: Boolean) : ScheduleDetailAction()
     data class SendRecord(val text: String) : ScheduleDetailAction()
 }
 
@@ -54,6 +63,50 @@ fun ScheduleDetailScreen(
     ) {
 
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    val lifecycleOwner = LocalLifecycleOwner.current
+
+    val locationPermissionRequest = rememberLauncherForActivityResult(
+        ActivityResultContracts.RequestMultiplePermissions()
+    ) { permissions ->
+        when {
+            permissions.getOrDefault(Manifest.permission.ACCESS_FINE_LOCATION, false) -> {
+                // Precise location access granted.
+                println("@@@@@@: access granted fine")
+                viewModel.onAction(ScheduleDetailAction.AccessLocalPermission(true))
+            }
+
+            permissions.getOrDefault(Manifest.permission.ACCESS_COARSE_LOCATION, false) -> {
+                // Only approximate location access granted.
+                println("@@@@@@: access granted coarse")
+                viewModel.onAction(ScheduleDetailAction.AccessLocalPermission(true))
+            }
+
+            else -> {
+                // No location access granted.
+                println("@@@@@@: not access ")
+                viewModel.onAction(ScheduleDetailAction.AccessLocalPermission(false))
+
+            }
+        }
+        viewModel.onAction(ScheduleDetailAction.ShowRecordDialog(true))
+
+    }
+
+    LaunchedEffect(key1 = Unit) {
+        viewModel.eventsFlow.flowWithLifecycle(lifecycleOwner.lifecycle)
+            .collect { event ->
+                when (event) {
+                    is ScheduleDetailViewModel.Event.CheckUserLocationPermission -> {
+                        locationPermissionRequest.launch(arrayOf(
+                            Manifest.permission.ACCESS_FINE_LOCATION,
+                            Manifest.permission.ACCESS_COARSE_LOCATION))
+                    }
+                }
+            }
+    }
+
+
 
     Content(
         scheduleDetail,
@@ -167,7 +220,8 @@ private fun Content(
                 .padding(24.dp)
                 .align(Alignment.BottomEnd),
             onClick = {
-                onAction(ScheduleDetailAction.ShowRecordDialog(true))
+                onAction(ScheduleDetailAction.CheckUserLocationPermission)
+
             }
         ) {
             Icon(Icons.Filled.Add, contentDescription = "Add")
