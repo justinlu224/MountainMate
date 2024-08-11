@@ -35,4 +35,17 @@ platform :android do
     gradle(task: "clean assembleRelease")
     upload_to_play_store
   end
+
+  desc "deploy new version apk to firebase app distribution"
+  lane :firebase_distribute do
+    gradle(task: "assembleDebug")
+    firebase_app_distribution(
+        app: ENV["FIREBASE_APP_ID"],
+        firebase_cli_token: ENV["FIREBASE_TOKEN"],
+        android_artifact_type: "APK",
+        release_notes: changelog_from_git_commits(merge_commit_filtering: "exclude_merges"),
+        groups: "mountain",
+        debug: true)
+    end
+
 end
