@@ -16,3 +16,6 @@ local.properties
 .idea/vcs.xml
 .idea/misc.xml
 .idea/inspectionProfiles/Project_Default.xml
+*.idea
+app/src/main/res/values/keystring.xml
+app/google-services.json
