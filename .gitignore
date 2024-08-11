@@ -18,3 +18,4 @@ local.properties
 .idea/inspectionProfiles/Project_Default.xml
 *.idea
 app/src/main/res/values/keystring.xml
+app/google-services.json
