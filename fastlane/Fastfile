@@ -38,7 +38,7 @@ platform :android do
 
   desc "deploy new version apk to firebase app distribution"
   lane :firebase_distribute do
-    gradle(task: "assembleDebug")
+    gradle(task: "clean assembleDebug")
     firebase_app_distribution(
         app: ENV["FIREBASE_APP_ID"],
         firebase_cli_token: ENV["FIREBASE_TOKEN"],
