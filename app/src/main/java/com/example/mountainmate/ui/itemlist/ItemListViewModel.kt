@@ -47,6 +47,7 @@ class ItemListViewModel @Inject constructor(
             is ItemListUiAction.AddItem -> {
                 addItem(action.itemName, action.category)
             }
+            else -> {}
         }
     }
 
