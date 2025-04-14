@@ -14,7 +14,14 @@ class ExampleUnitTest {
         assertEquals(4, 2 + 2)
     }
 
-    fun logout() {
+    fun login() {
         
+    }
+
+    fun regiest() {
+        
+    }
+    fun logout() {
+
     }
 }
