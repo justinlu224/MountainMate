@@ -17,4 +17,8 @@ class ExampleUnitTest {
     fun login() {
         
     }
+
+    fun regiest() {
+        
+    }
 }
