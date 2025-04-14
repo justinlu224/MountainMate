@@ -1,6 +1,9 @@
 name: GitHub Actions # work flow name
 run-name: ${{ github.actor }} is testing out GitHub Actions 🚀 # work flow run name
-on: [push]
+on:
+  push:
+    branches:
+      - develop
 jobs:
   Explore-GitHub-Actions: # job name
     runs-on: ubuntu-latest
