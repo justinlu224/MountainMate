@@ -18,9 +18,6 @@ class ExampleUnitTest {
         
     }
 
-    fun regiest() {
-        
-    }
     fun logout() {
 
     }
