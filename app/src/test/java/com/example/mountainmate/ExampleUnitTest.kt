@@ -18,6 +18,10 @@ class ExampleUnitTest {
         
     }
 
+    fun regiest2() {
+
+    }
+
     fun regiest() {
         
     }
